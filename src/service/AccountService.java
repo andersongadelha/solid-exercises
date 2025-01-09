@@ -5,4 +5,5 @@ public interface AccountService {
     void listAccounts();
     void withDraw();
     void deposit();
+    void transfer();
 }

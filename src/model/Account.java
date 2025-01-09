@@ -64,6 +64,6 @@ public abstract class Account {
         funds = funds.subtract(value);
     }
 
-    public abstract double serviceTaxes();
+    public abstract BigDecimal serviceTaxes();
 
 }

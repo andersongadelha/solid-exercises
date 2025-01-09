@@ -8,6 +8,8 @@ import repository.AccountRepository;
 import repository.AccountRepositoryImpl;
 import service.AccountService;
 import service.AccountServiceImpl;
+import service.NotificationService;
+import service.NotificationServiceImpl;
 import static util.InputUtil.getPositiveInteger;
 
 import java.util.Scanner;
@@ -19,7 +21,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         AccountRepository accountRepository = new AccountRepositoryImpl();
-        AccountService accountService = new AccountServiceImpl(accountRepository, scanner);
+        NotificationService notificationService = new NotificationServiceImpl(scanner);
+        AccountService accountService = new AccountServiceImpl(accountRepository, scanner, notificationService);
         AccountFactoryRegistry.registerFactory(AccountType.CURRENT_ACCOUNT, new CurrentAccountFactory());
         AccountFactoryRegistry.registerFactory(AccountType.SAVINGS_ACCOUNT, new SavingsAccountFactory());
 
@@ -51,7 +54,7 @@ public class Main {
                     accountService.deposit();
                     break;
                 case 5:
-                    System.out.println("5. Realizar uma transferência");
+                    accountService.transfer();
                     break;
                 case 6:
                     System.out.println("6. Relatório de estatísticas");

@@ -10,7 +10,7 @@ public class CurrentAccount extends Account {
     }
 
     @Override
-    public double serviceTaxes() {
-        return 0;
+    public BigDecimal serviceTaxes() {
+        return BigDecimal.ZERO;
     }
 }

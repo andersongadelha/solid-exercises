@@ -24,10 +24,12 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository repository;
     private final Scanner scanner;
+    private final NotificationService notificationService;
 
-    public AccountServiceImpl(AccountRepository repository, Scanner scanner) {
+    public AccountServiceImpl(AccountRepository repository, Scanner scanner, NotificationService notificationService) {
         this.repository = repository;
         this.scanner = scanner;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -93,6 +95,32 @@ public class AccountServiceImpl implements AccountService {
             BigDecimal value = InputUtil.getPositiveBigDecimal(scanner);
             account.deposit(value);
             repository.updateFunds(account);
+        } catch (Exception e) {
+            System.out.println("Erro ao realizar deposito: " + e.getMessage());
+        }
+        System.out.println("Deposito realizado com sucesso.");
+    }
+
+    @Override
+    public void transfer() {
+        System.out.println("Primeiro digite o numero da conta que vai ter o saldo subtraído");
+        System.out.println("Digite o numero da conta com digito (xxx-x): ");
+        String fullAccountNumberWithDraw = InputUtil.getNonEmptyInput(scanner);
+        try {
+            Account accountWithDraw = repository.findByFullAccountNumber(fullAccountNumberWithDraw);
+            System.out.println("Digite agora a conta que vai receber a transferência");
+            System.out.println("Digite o numero da conta com digito (xxx-x): ");
+            String fullAccountNumberDeposit = InputUtil.getNonEmptyInput(scanner);
+            Account accountDeposit = repository.findByFullAccountNumber(fullAccountNumberDeposit);
+            System.out.println("Digite a quantidade de deseja transferir: ");
+            BigDecimal value = InputUtil.getPositiveBigDecimal(scanner);
+            BigDecimal taxes = accountWithDraw.serviceTaxes();
+            accountWithDraw.withDraw(value.add(taxes));
+            accountDeposit.deposit(value);
+            repository.updateFunds(accountWithDraw);
+            repository.updateFunds(accountDeposit);
+
+            notificationService.notify(accountDeposit.getUser());
         } catch (Exception e) {
             System.out.println("Erro ao realizar deposito: " + e.getMessage());
         }

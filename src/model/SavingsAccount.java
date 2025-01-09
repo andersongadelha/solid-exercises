@@ -10,7 +10,7 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public double serviceTaxes() {
-        return 15;
+    public BigDecimal serviceTaxes() {
+        return BigDecimal.valueOf(15);
     }
 }
