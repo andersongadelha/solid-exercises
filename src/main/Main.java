@@ -1,3 +1,13 @@
+package main;
+
+import factories.AccountFactoryRegistry;
+import factories.CurrentAccountFactory;
+import factories.SavingsAccountFactory;
+import model.AccountType;
+import repository.AccountRepository;
+import repository.AccountRepositoryImpl;
+import service.AccountService;
+import service.AccountServiceImpl;
 import static util.InputUtil.getPositiveInteger;
 
 import java.util.Scanner;
@@ -5,16 +15,21 @@ import java.util.Scanner;
 public class Main {
     private static final int EXIT_OPTION = 7;
     public static void main(String[] args) {
+        //TODO:Criar metodo para inicializar e para menu
         Scanner scanner = new Scanner(System.in);
+        AccountRepository accountRepository = new AccountRepositoryImpl();
+        AccountService accountService = new AccountServiceImpl(accountRepository, scanner);
+        AccountFactoryRegistry.registerFactory(AccountType.CURRENT_ACCOUNT, new CurrentAccountFactory());
+        AccountFactoryRegistry.registerFactory(AccountType.SAVINGS_ACCOUNT, new SavingsAccountFactory());
 
         int option;
 
         do {
-            System.out.println("\n=== Sistema de Gerenciamento de contas ===");
-            System.out.println("1. criar uma conta");
-            System.out.println("2. listar contas");
-            System.out.println("3. realizar saque");
-            System.out.println("4. realizar uma transferência");
+            System.out.println("Sistema de Gerenciamento de contas");
+            System.out.println("1. Criar uma conta");
+            System.out.println("2. Listar contas");
+            System.out.println("3. Realizar saque");
+            System.out.println("4. Realizar uma transferência");
             System.out.println("5. Excluir conta");
             System.out.println("6. Relatório de estatísticas");
             System.out.println("7. Sair");
@@ -23,7 +38,7 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    System.out.println("1. criar uma conta");
+                    accountService.addAccount();
                     break;
                 case 2:
                     System.out.println("2. listar contas");
