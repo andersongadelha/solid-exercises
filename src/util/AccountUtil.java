@@ -4,7 +4,9 @@ import factories.AccountFactory;
 import factories.AccountFactoryRegistry;
 import model.Account;
 import model.AccountType;
+import model.User;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -26,7 +28,7 @@ public class AccountUtil {
     public static String serialize(Account account) {
         return String.join(
                 ";",
-                account.getOwnerName(),
+                UserUtil.serialize(account.getUser()),
                 String.valueOf(account.getAccountNumber()),
                 String.valueOf(account.getDigit()),
                 String.valueOf(account.getFunds()),
@@ -44,16 +46,21 @@ public class AccountUtil {
     public static Account deserialize(String string) {
         try {
             String[] parts = string.split(";");
-            AccountType accountType = AccountType.valueOf(parts[5]);
+            AccountType accountType = AccountType.valueOf(parts[8]);
             AccountFactory factory = AccountFactoryRegistry.getFactory(accountType);
 
-            String ownerName = parts[0];
-            int accountNumber = Integer.parseInt(parts[1]);
-            int digit = Integer.parseInt(parts[2]);
-            double funds = Double.parseDouble(parts[3]);
-            LocalDate openingDate = LocalDateUtil.deserialize(parts[4]);
+            String userName = parts[0];
+            String cpf = parts[1];
+            String email = parts[2];
+            String phoneNumber = parts[3];
+            User user = new User(userName, email, cpf, phoneNumber);
 
-            return factory.create(ownerName, accountNumber, digit, funds, openingDate, accountType);
+            int accountNumber = Integer.parseInt(parts[4]);
+            int digit = Integer.parseInt(parts[5]);
+            BigDecimal funds = BigDecimal.valueOf(Double.parseDouble(parts[6]));
+            LocalDate openingDate = LocalDateUtil.deserialize(parts[7]);
+
+            return factory.create(user, accountNumber, digit, funds, openingDate, accountType);
         } catch (Exception e) {
             System.out.println("Erro ao desserializar conta: " + e.getMessage());
             return null;

@@ -1,11 +1,12 @@
 package model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class SavingsAccount extends Account {
 
-    public SavingsAccount(String owner, int accountNumber, int digit, double funds, LocalDate openingDate, AccountType accountType) {
-        super(owner, accountNumber, digit, funds, openingDate, accountType);
+    public SavingsAccount(User user, int accountNumber, int digit, BigDecimal funds, LocalDate openingDate, AccountType accountType) {
+        super(user, accountNumber, digit, funds, openingDate, accountType);
     }
 
     @Override

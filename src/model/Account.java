@@ -1,18 +1,20 @@
 package model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public abstract class Account {
 
-    private String ownerName;
+    private User user;
     private int accountNumber;
     private int digit;
-    private double funds;
+    private BigDecimal funds;
     private LocalDate openingDate;
     private AccountType accountType;
 
-    public Account(String ownerName, int accountNumber, int digit, double funds, LocalDate openingDate, AccountType accountType) {
-        this.ownerName = ownerName;
+    public Account(User user, int accountNumber, int digit, BigDecimal funds, LocalDate openingDate, AccountType accountType) {
+        this.user = user;
         this.accountNumber = accountNumber;
         this.digit = digit;
         this.funds = funds;
@@ -20,8 +22,8 @@ public abstract class Account {
         this.accountType = accountType;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public User getUser() {
+        return user;
     }
 
     public int getAccountNumber() {
@@ -32,7 +34,7 @@ public abstract class Account {
         return digit;
     }
 
-    public double getFunds() {
+    public BigDecimal getFunds() {
         return funds;
     }
 
@@ -44,12 +46,18 @@ public abstract class Account {
         return accountType;
     }
 
-    public void deposit(double value) {
-        funds += value;
+    public void deposit(BigDecimal value) {
+        if (Objects.isNull(value)) {
+            throw new IllegalArgumentException("O valor de deposito não pode ser nulo");
+        }
+        funds = funds.add(value);
     }
 
-    public void withDraw(double value) {
-        funds -= value;
+    public void withDraw(BigDecimal value) {
+        if (value == null) {
+            throw new IllegalArgumentException("O valor do saque não pode ser nulo");
+        }
+        funds = funds.subtract(value);
     }
 
     public abstract double serviceTaxes();

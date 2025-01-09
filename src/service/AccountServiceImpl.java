@@ -4,12 +4,17 @@ import factories.AccountFactory;
 import factories.AccountFactoryRegistry;
 import model.Account;
 import model.AccountType;
+import model.User;
 import repository.AccountRepository;
 import util.InputUtil;
 import static util.InputUtil.getAccountType;
+import static util.InputUtil.getCPF;
+import static util.InputUtil.getEmail;
 import static util.InputUtil.getNonEmptyInput;
+import static util.InputUtil.getPhoneNumber;
 import util.LocalDateUtil;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +34,13 @@ public class AccountServiceImpl implements AccountService {
     public void addAccount() {
         System.out.print("Digite o nome da pessoa titular da conta: ");
         String ownerName = getNonEmptyInput(scanner);
+        String email = getEmail(scanner);
+        String phoneNumber = getPhoneNumber(scanner);
+        String cpf = getCPF(scanner);
+
+        User user = new User(ownerName, cpf, email, phoneNumber);
         System.out.println("Digite quanto vai depositar para abrir a conta: ");
-        int funds = InputUtil.getPositiveInteger(scanner);
+        BigDecimal funds = BigDecimal.valueOf(InputUtil.getPositiveInteger(scanner));
         int accountNumber = generateAccountNumber();
         int digit = generateAccountDigit();
 
@@ -43,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
 
         try {
             AccountFactory factory = AccountFactoryRegistry.getFactory(accountType);
-            Account newAccount = factory.create(ownerName, accountNumber, digit, funds, openingDate, accountType);
+            Account newAccount = factory.create(user, accountNumber, digit, funds, openingDate, accountType);
             repository.save(newAccount);
             System.out.println("Conta criada com sucesso!");
         } catch (Exception e) {
@@ -66,7 +76,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private void showDetails(Account account) {
-        System.out.println("Titular:" + account.getOwnerName());
+        System.out.println("Titular:" + account.getUser().getName());
+        System.out.println("CPF:" + account.getUser().getCpf());
+        System.out.println("E-mail:" + account.getUser().getEmail());
+        System.out.println("Telefone:" + account.getUser().getPhoneNumber());
         System.out.println("Numero da conta:" + account.getAccountNumber());
         System.out.println("Digito: " + account.getDigit());
         System.out.println("Tipo de conta: " + account.getAccountType().getDescription());

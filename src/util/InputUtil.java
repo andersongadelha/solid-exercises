@@ -108,4 +108,64 @@ public class InputUtil {
         return accountType;
     }
 
+    /**
+     * Função para receber um input e validar um e-mail.
+     *
+     * @param scanner Scanner para entrada de dados
+     * @return Um e-mail válido.
+     */
+    public static String getEmail(Scanner scanner) {
+        String email;
+        do {
+            System.out.println("Digite um e-mail válido:");
+            email = scanner.nextLine();
+            if (!StringValidationUtil.isValidEmail(email)) {
+                System.out.println("E-mail inválido. Tente novamente.");
+                email = null;
+            }
+        } while (Objects.isNull(email));
+
+        return email;
+    }
+
+    /**
+     * Função para receber um input e validar um CPF.
+     *
+     * @param scanner Scanner para entrada de dados
+     * @return Um CPF válido.
+     */
+    public static String getCPF(Scanner scanner) {
+        String cpf;
+        do {
+            System.out.println("Digite um CPF válido (formato: 000.000.000-00):");
+            cpf = scanner.nextLine();
+            if (!StringValidationUtil.isValidCPF(cpf)) {
+                System.out.println("CPF inválido. Tente novamente.");
+                cpf = null;
+            }
+        } while (Objects.isNull(cpf));
+
+        return cpf;
+    }
+
+    /**
+     * Função para receber um input e validar um número de telefone.
+     *
+     * @param scanner Scanner para entrada de dados
+     * @return Um número de telefone válido.
+     */
+    public static String getPhoneNumber(Scanner scanner) {
+        String phoneNumber;
+        do {
+            System.out.println("Digite um número de telefone válido (formato: XXXXXXXXXXX):");
+            phoneNumber = scanner.nextLine();
+            if (!StringValidationUtil.isValidPhone(phoneNumber)) {
+                System.out.println("Número de telefone inválido. Tente novamente.");
+                phoneNumber = null;
+            }
+        } while (Objects.isNull(phoneNumber));
+
+        return phoneNumber;
+    }
+
 }
