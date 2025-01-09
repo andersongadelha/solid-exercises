@@ -13,9 +13,10 @@ import static util.InputUtil.getPositiveInteger;
 import java.util.Scanner;
 
 public class Main {
+
     private static final int EXIT_OPTION = 7;
+    
     public static void main(String[] args) {
-        //TODO:Criar metodo para inicializar e para menu
         Scanner scanner = new Scanner(System.in);
         AccountRepository accountRepository = new AccountRepositoryImpl();
         AccountService accountService = new AccountServiceImpl(accountRepository, scanner);
@@ -41,7 +42,7 @@ public class Main {
                     accountService.addAccount();
                     break;
                 case 2:
-                    System.out.println("2. listar contas");
+                    accountService.listAccounts();
                     break;
                 case 3:
                     System.out.println("3. realizar saque");

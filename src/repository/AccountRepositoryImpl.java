@@ -3,10 +3,14 @@ package repository;
 import model.Account;
 import util.AccountUtil;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountRepositoryImpl implements AccountRepository {
     private static final String ACCOUNT_FILE = "accounts.txt";
@@ -24,5 +28,22 @@ public class AccountRepositoryImpl implements AccountRepository {
         } catch (IOException e) {
             System.out.println("Erro ao salvar conta.");
         }
+    }
+
+    @Override
+    public List<Account> findAll() {
+        List<Account> accounts = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Account account = AccountUtil.deserialize(line);
+                if (account != null) {
+                    accounts.add(account);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Não existem contas cadastradas.");
+        }
+        return accounts;
     }
 }

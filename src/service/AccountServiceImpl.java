@@ -8,9 +8,11 @@ import repository.AccountRepository;
 import util.InputUtil;
 import static util.InputUtil.getAccountType;
 import static util.InputUtil.getNonEmptyInput;
+import util.LocalDateUtil;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class AccountServiceImpl implements AccountService {
@@ -49,11 +51,27 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
+    public void listAccounts() {
+        List<Account> videos = repository.findAll();
+        videos.forEach(this::showDetails);
+    }
+
     private int generateAccountNumber() {
         return (int) (Math.random() * 1000);
     }
 
     private int generateAccountDigit() {
         return (int) (Math.random() * 10);
+    }
+
+    private void showDetails(Account account) {
+        System.out.println("Titular:" + account.getOwnerName());
+        System.out.println("Numero da conta:" + account.getAccountNumber());
+        System.out.println("Digito: " + account.getDigit());
+        System.out.println("Tipo de conta: " + account.getAccountType().getDescription());
+        System.out.println("Saldo: " + account.getFunds());
+        System.out.println("Data de abertura da conta: " + LocalDateUtil.serialize(account.getOpeningDate()));
+        System.out.println();
     }
 }
