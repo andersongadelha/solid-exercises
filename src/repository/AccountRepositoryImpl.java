@@ -46,4 +46,37 @@ public class AccountRepositoryImpl implements AccountRepository {
         }
         return accounts;
     }
+
+    @Override
+    public Account findByFullAccountNumber(String fullAccountNumber) {
+        List<Account> accounts = findAll();
+
+        return accounts.stream()
+                .filter(account -> account.getFullAccountNumber().equalsIgnoreCase(fullAccountNumber))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Não foi encontrada nenhuma conta com esse numero."));
+    }
+
+    @Override
+    public void updateFunds(Account account) {
+        List<Account> allAccounts = findAll();
+
+        List<Account> updatedAccounts = new ArrayList<>(allAccounts.stream()
+                .filter(acc -> !acc.getFullAccountNumber().equals(account.getFullAccountNumber()))
+                .toList());
+        updatedAccounts.add(account);
+
+        saveAccounts(updatedAccounts);
+    }
+
+    private void saveAccounts(List<Account> updatedAccounts) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            for (Account account : updatedAccounts) {
+                bw.write(AccountUtil.serialize(account));
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar contas");
+        }
+    }
 }

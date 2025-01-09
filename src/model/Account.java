@@ -46,6 +46,10 @@ public abstract class Account {
         return accountType;
     }
 
+    public String getFullAccountNumber() {
+        return accountNumber + "-" + digit;
+    }
+
     public void deposit(BigDecimal value) {
         if (Objects.isNull(value)) {
             throw new IllegalArgumentException("O valor de deposito não pode ser nulo");

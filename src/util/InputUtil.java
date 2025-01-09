@@ -2,6 +2,7 @@ package util;
 
 import model.AccountType;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Scanner;
@@ -166,6 +167,36 @@ public class InputUtil {
         } while (Objects.isNull(phoneNumber));
 
         return phoneNumber;
+    }
+
+    /**
+     * Função para receber um input e retornar um valor BigDecimal.
+     * Caso seja recebido algum valor diferente de um número maior que zero,
+     * a função solicita o input novamente.
+     *
+     * @param scanner Scanner para leitura do input.
+     * @return Um BigDecimal maior que zero.
+     */
+    public static BigDecimal getPositiveBigDecimal(Scanner scanner) {
+        BigDecimal output = BigDecimal.ZERO;
+        boolean validInput = false;
+
+        while (!validInput) {
+            System.out.println("Digite um número maior que zero:");
+            String input = scanner.nextLine();
+            try {
+                output = new BigDecimal(input);
+                if (output.compareTo(BigDecimal.ZERO) > 0) {
+                    validInput = true;
+                } else {
+                    System.out.println("A entrada deve ser um número maior que zero.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("A entrada deve ser um número válido.");
+            }
+        }
+
+        return output;
     }
 
 }

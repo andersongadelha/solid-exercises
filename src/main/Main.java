@@ -30,8 +30,8 @@ public class Main {
             System.out.println("1. Criar uma conta");
             System.out.println("2. Listar contas");
             System.out.println("3. Realizar saque");
-            System.out.println("4. Realizar uma transferência");
-            System.out.println("5. Excluir conta");
+            System.out.println("4. Realizar um deposito");
+            System.out.println("5. Realizar uma transferência");
             System.out.println("6. Relatório de estatísticas");
             System.out.println("7. Sair");
             System.out.print("Escolha uma opção: ");
@@ -45,13 +45,13 @@ public class Main {
                     accountService.listAccounts();
                     break;
                 case 3:
-                    System.out.println("3. realizar saque");
+                    accountService.withDraw();
                     break;
                 case 4:
-                    System.out.println("4. realizar uma transferência");
+                    accountService.deposit();
                     break;
                 case 5:
-                    System.out.println("5. Excluir conta");
+                    System.out.println("5. Realizar uma transferência");
                     break;
                 case 6:
                     System.out.println("6. Relatório de estatísticas");

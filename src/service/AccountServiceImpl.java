@@ -40,7 +40,7 @@ public class AccountServiceImpl implements AccountService {
 
         User user = new User(ownerName, cpf, email, phoneNumber);
         System.out.println("Digite quanto vai depositar para abrir a conta: ");
-        BigDecimal funds = BigDecimal.valueOf(InputUtil.getPositiveInteger(scanner));
+        BigDecimal funds = InputUtil.getPositiveBigDecimal(scanner);
         int accountNumber = generateAccountNumber();
         int digit = generateAccountDigit();
 
@@ -65,6 +65,38 @@ public class AccountServiceImpl implements AccountService {
     public void listAccounts() {
         List<Account> videos = repository.findAll();
         videos.forEach(this::showDetails);
+    }
+
+    @Override
+    public void withDraw() {
+        System.out.println("Digite o numero da conta com digito que deseja realizar o saque (xxx-x): ");
+        String fullAccountNumber = InputUtil.getNonEmptyInput(scanner);
+        try {
+            Account account = repository.findByFullAccountNumber(fullAccountNumber);
+            System.out.println("Digite a quantidade de deseja sacar: ");
+            BigDecimal value = InputUtil.getPositiveBigDecimal(scanner);
+            account.withDraw(value);
+            repository.updateFunds(account);
+        } catch (Exception e) {
+            System.out.println("Erro ao realizar saque: " + e.getMessage());
+        }
+        System.out.println("Saque realizado com sucesso.");
+    }
+
+    @Override
+    public void deposit() {
+        System.out.println("Digite o numero da conta com digito que deseja realizar o deposito (xxx-x): ");
+        String fullAccountNumber = InputUtil.getNonEmptyInput(scanner);
+        try {
+            Account account = repository.findByFullAccountNumber(fullAccountNumber);
+            System.out.println("Digite a quantidade de deseja depositar: ");
+            BigDecimal value = InputUtil.getPositiveBigDecimal(scanner);
+            account.deposit(value);
+            repository.updateFunds(account);
+        } catch (Exception e) {
+            System.out.println("Erro ao realizar deposito: " + e.getMessage());
+        }
+        System.out.println("Deposito realizado com sucesso.");
     }
 
     private int generateAccountNumber() {
