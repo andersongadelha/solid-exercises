@@ -35,7 +35,7 @@ public class Main {
             System.out.println("3. Realizar saque");
             System.out.println("4. Realizar um deposito");
             System.out.println("5. Realizar uma transferência");
-            System.out.println("6. Relatório de estatísticas");
+            System.out.println("6. Imprimir relatório");
             System.out.println("7. Sair");
             System.out.print("Escolha uma opção: ");
             option = getPositiveInteger(scanner);
@@ -57,7 +57,7 @@ public class Main {
                     accountService.transfer();
                     break;
                 case 6:
-                    System.out.println("6. Relatório de estatísticas");
+                    accountService.printReport();
                     break;
                 case 7:
                     System.out.println("Saindo do sistema...");

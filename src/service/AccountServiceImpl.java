@@ -127,6 +127,16 @@ public class AccountServiceImpl implements AccountService {
         System.out.println("Deposito realizado com sucesso.");
     }
 
+    @Override
+    public void printReport() {
+        List<Account> accounts = repository.findAll();
+        int numberOfAccounts = accounts.size();
+        BigDecimal totalFunds = accounts.stream().map(Account::getFunds).reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.println("Relatório do banco:");
+        System.out.println("Quantidade total de contas: " + numberOfAccounts);
+        System.out.println("Saldo acumulado de todas as contas: " + totalFunds);
+    }
+
     private int generateAccountNumber() {
         return (int) (Math.random() * 1000);
     }

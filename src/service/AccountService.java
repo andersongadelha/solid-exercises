@@ -6,4 +6,5 @@ public interface AccountService {
     void withDraw();
     void deposit();
     void transfer();
+    void printReport();
 }
